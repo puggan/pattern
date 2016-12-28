@@ -149,14 +149,14 @@ TEXT_BLOCK;
 
 				case 'l':
 				{
-					$filename = $this->cli->ask("file path? [saved.json]") ?: 'saved.json';
+					$filename = trim($this->cli->ask("file path? [saved.json]")) ?: 'saved.json';
 					$this->pattern = pattern::load($filename);
 					return TRUE;
 				}
 
 				case 's':
 				{
-					$filename = $this->cli->ask("file path? [saved.json]") ?: 'saved.json';
+					$filename = trim($this->cli->ask("file path? [saved.json]")) ?: 'saved.json';
 					$this->pattern->save($filename);
 					return TRUE;
 				}
