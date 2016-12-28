@@ -33,7 +33,12 @@
 		{
 			$this->clue = $sizes;
 			$this->chain = new black_chain($sizes, $this->size);
-			return ((boolean) $this->chain->chain[0]->starts);
+			if(isset($this->chain->chain[0]) AND $this->chain->chain[0]->starts)
+			{
+				$this->keys = $this->chain->to_keys();
+				return TRUE;
+			}
+			return FALSE;
 		}
 
 		/**
