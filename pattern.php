@@ -7,11 +7,12 @@
 	{
 		if($argv[1] == '-')
 		{
-			$cli->load("php://stdin");
+			$cli->pattern = pattern::load("php://stdin");
+
 		}
 		else
 		{
-			$cli->load($argv[1]);
+			$cli->pattern = pattern::load($argv[1]);
 		}
 	}
 	$cli->run();
