@@ -213,7 +213,48 @@
 		{
 			$raw_file = file_get_contents($filename);
 			$saved = json_decode($raw_file, TRUE);
-			// TODO: if not json, try other formats
+			if(!$saved)
+			{
+				if(substr($raw_file, 0, 12) == 'SAVEFILE:41:')
+				{
+					$saved = pattern::parse_sgt($raw_file);
+				}
+				else
+				{
+					$saved = array();
+					$rows = explode("\n", $raw_file);
+					if(count($rows) > 5)
+					{
+						$saved['width'] = (int) $rows[0];
+						$saved['height'] = (int) $rows[1];
+						$separator = trim($rows[2]);
+						if(empty($separator) AND $saved['width'] > 0 AND $saved['height'] > 0 AND count($rows) > $saved['height'] + $saved['width'] + 3)
+						{
+							$saved['col'] = array_slice($rows, 3, $saved['width']);
+							$saved['row'] = array_slice($rows, $saved['width'] + 4, $saved['height']);
+						}
+						else if($separator)
+						{
+							foreach($rows as $row_nr => $row)
+							{
+								if(empty(trim($row)))
+								{
+									$saved['col'] = array_filter(array_slice($rows, 0, $row_nr));
+									$saved['row'] = array_filter(array_slice($rows, $row_nr + 1));
+									$saved['width'] = count($saved['col']);
+									$saved['height'] = count($saved['row']);
+								}
+							}
+						}
+
+						if(empty($saved['col']))
+						{
+							$saved = NULL;
+						}
+					}
+
+				}
+			}
 			if($saved)
 			{
 				unset($raw_file);
@@ -296,5 +337,35 @@
 			}
 
 			imagepng($img, $filename);
+		}
+
+		static function parse_sgt($file)
+		{
+			$saved = array();
+			$parameters = array();
+			foreach(explode("\n", $file) AS $row)
+			{
+				$parts = explode(':', $row, 3);
+				$parameters[trim($parts[0])] = trim($parts[2]);
+			}
+			$size = explode('x', $parameters['PARAMS']);
+			$saved['width'] = $size[0];
+			$saved['height'] = $size[1];
+			$saved['col'] = array('');
+			$saved['row'] = array('');
+			$patterns = explode('/', $parameters['DESC']);
+			foreach($patterns as $p_nr => $p_code)
+			{
+				if($p_nr < $saved['width'])
+				{
+					$saved['col'][] = str_replace('.', ' ', $p_code);
+				}
+				else
+				{
+					$saved['row'][] = str_replace('.', ' ', $p_code);
+				}
+			}
+
+			return $saved;
 		}
 	}
