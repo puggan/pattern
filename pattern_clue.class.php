@@ -31,8 +31,13 @@
 		 */
 		function set_clue($sizes) : bool
 		{
-			$this->clue = $sizes;
-			$this->chain = new black_chain($sizes, $this->size);
+			$this->clue = array();
+			foreach($sizes as $next_size)
+			{
+				$this->clue[] = (int) $next_size;
+			}
+			$this->clue = array_filter($this->clue);
+			$this->chain = new black_chain($this->clue, $this->size);
 			if(isset($this->chain->chain[0]) AND $this->chain->chain[0]->starts)
 			{
 				$this->keys = $this->chain->to_keys();

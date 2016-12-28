@@ -201,4 +201,46 @@
 
 			return $changes;
 		}
+
+		static function load(string $filename)
+		{
+			$saved = json_decode(file_get_contents($filename), TRUE);
+			if($saved)
+			{
+				// Size
+				$pattern = new pattern($saved['width'], $saved['height']);
+
+				// Rows
+				$offset = empty($saved['row'][0]) ? 0 : 1;
+				foreach($saved['row'] as $s_row_nr => $row_clue)
+				{
+					$row_nr = $s_row_nr + $offset;
+					if($row_nr AND $row_clue)
+					{
+						$pattern->set_row_clue($row_nr, explode(' ', $row_clue));
+					}
+				}
+
+				// Columns
+				$offset = empty($saved['col'][0]) ? 0 : 1;
+				foreach($saved['col'] as $s_col_nr => $col_clue)
+				{
+					$col_nr = $s_col_nr + $offset;
+					if($col_nr AND $col_clue)
+					{
+						$pattern->set_column_clue($col_nr, explode(' ', $col_clue));
+					}
+				}
+
+				if($saved['plan'])
+				{
+					foreach($saved['plan'] as $row_nr => $row_keys)
+					{
+						$pattern->rows[$row_nr]->update_key($row_keys);
+					}
+				}
+
+				return $pattern;
+			}
+		}
 	}

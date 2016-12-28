@@ -157,23 +157,4 @@
 			$this->print($question . ' ');
 			return fgets(STDIN);
 		}
-
-		/**
-		 * @param string $string
-		 *
-		 * @return integer[]
-		 */
-		function split_ints(string $string)
-		{
-			$ints = array();
-			foreach(explode(' ', $string) as $part)
-			{
-				if(strlen($part))
-				{
-					$ints[] = (int) $part;
-				}
-			}
-
-			return $ints;
-		}
 	}

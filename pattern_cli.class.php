@@ -87,7 +87,7 @@ TEXT_BLOCK;
 				$clues = $this->cli->ask("Clues for column {$col_nr}:");
 				if($clues)
 				{
-					$this->pattern->set_column_clue($col_nr, $this->cli->split_ints($clues));
+					$this->pattern->set_column_clue($col_nr, explode(' ', $clues));
 				}
 				else
 				{
@@ -99,7 +99,7 @@ TEXT_BLOCK;
 				$clues = $this->cli->ask("Clues for row {$row_nr}:");
 				if($clues)
 				{
-					$this->pattern->set_row_clue($row_nr, $this->cli->split_ints($clues));
+					$this->pattern->set_row_clue($row_nr, explode(' ', $clues));
 				}
 				else
 				{
@@ -134,7 +134,7 @@ TEXT_BLOCK;
 				case 'l':
 				{
 					$filename = $this->cli->ask("file path? [saved.json]") ?: 'saved.json';
-					$this->load($filename);
+					$this->pattern = pattern::load($filename);
 					return TRUE;
 				}
 				case 'q':
@@ -224,7 +224,7 @@ TEXT_BLOCK;
 
 					if($clue)
 					{
-						$this->pattern->set_clue($type, $col_nr ?? $row_nr, $this->cli->split_ints($clue));
+						$this->pattern->set_clue($type, $col_nr ?? $row_nr, explode(' ', $clue));
 					}
 
 					return TRUE;
@@ -300,45 +300,5 @@ TEXT_BLOCK;
 			$this->missing = $missing;
 			$this->cli->set_color();
 			$this->cli->set_position($min_clue_height + $this->pattern->height + 4, 1);
-		}
-
-		function load(string $filename)
-		{
-			$saved = json_decode(file_get_contents($filename), TRUE);
-			if($saved)
-			{
-				// Size
-				$this->pattern = new pattern($saved['width'], $saved['height']);
-
-				// Rows
-				$offset = empty($saved['row'][0]) ? 0 : 1;
-				foreach($saved['row'] as $s_row_nr => $row_clue)
-				{
-					$row_nr = $s_row_nr + $offset;
-					if($row_nr AND $row_clue)
-					{
-						$this->pattern->set_row_clue($row_nr, $this->cli->split_ints($row_clue));
-					}
-				}
-
-				// Columns
-				$offset = empty($saved['col'][0]) ? 0 : 1;
-				foreach($saved['col'] as $s_col_nr => $col_clue)
-				{
-					$col_nr = $s_col_nr + $offset;
-					if($col_nr AND $col_clue)
-					{
-						$this->pattern->set_column_clue($col_nr, $this->cli->split_ints($col_clue));
-					}
-				}
-
-				if($saved['plan'])
-				{
-					foreach($saved['plan'] as $row_nr => $row_keys)
-					{
-						$this->pattern->rows[$row_nr]->update_key($row_keys);
-					}
-				}
-			}
 		}
 	}
