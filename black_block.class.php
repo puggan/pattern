@@ -30,13 +30,9 @@
 			{
 				throw new Exception('Min_start should be a positive integer');
 			}
-			if($min_start > $size)
+			if($max_start < $min_start)
 			{
-				throw new Exception('Min_start should be between 1 and size');
-			}
-			if($max_start < $min_start OR $max_start > $size)
-			{
-				throw new Exception('max_start should be between min_start and size');
+				throw new Exception('max_start should be at least min_start');
 			}
 
 			// Store size/length in object
