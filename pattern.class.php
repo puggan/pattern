@@ -278,4 +278,23 @@
 			}
 			return $saved;
 		}
+
+		function export_png(string $filename)
+		{
+			$img = imagecreate($this->width, $this->height);
+			$gray = imagecolorallocate($img, 127, 127, 127);
+			$white = imagecolorallocate($img, 255, 255, 255);
+			$black = imagecolorallocate($img, 0, 0, 0);
+
+			foreach($this->get_rows() as $row_nr => $row_data)
+			{
+				foreach($row_data as $col_nr => $value)
+				{
+					$color = (($value > 0) ? $black : $white);
+					imagesetpixel($img, $col_nr - 1, $row_nr - 1, $color);
+				}
+			}
+
+			imagepng($img, $filename);
+		}
 	}

@@ -117,6 +117,7 @@ TEXT_BLOCK;
 Congratulations.
 What to do next?
  * (S)ave
+ * Export as (P)NG
  * (N)ew
  * (L)oad
  * (Q)uit
@@ -158,6 +159,13 @@ TEXT_BLOCK;
 				{
 					$filename = trim($this->cli->ask("file path? [saved.json]")) ?: 'saved.json';
 					$this->pattern->save($filename);
+					return TRUE;
+				}
+
+				case 'p':
+				{
+					$filename = trim($this->cli->ask("file path? [saved.png]")) ?: 'saved.png';
+					$this->pattern->export_png($filename);
 					return TRUE;
 				}
 
