@@ -202,11 +202,22 @@
 			return $changes;
 		}
 
-		static function load(string $filename)
+		/**
+		 * load a pattern from file
+		 *
+		 * @param string $filename
+		 *
+		 * @return pattern
+		 */
+		static function load(string $filename) : pattern
 		{
-			$saved = json_decode(file_get_contents($filename), TRUE);
+			$raw_file = file_get_contents($filename);
+			$saved = json_decode($raw_file, TRUE);
+			// TODO: if not json, try other formats
 			if($saved)
 			{
+				unset($raw_file);
+
 				// Size
 				$pattern = new pattern($saved['width'], $saved['height']);
 
@@ -242,5 +253,29 @@
 
 				return $pattern;
 			}
+			return NULL;
+		}
+
+		function save(string $filename)
+		{
+			$saved = array();
+			$saved['width'] = $this->width;
+			$saved['height'] = $this->height;
+			$saved['row'] = array('');
+			foreach($this->rows as $row_nr => $row)
+			{
+				$saved['row'][$row_nr] = implode(' ', $row->clue);
+			}
+			$saved['col'] = array('');
+			foreach($this->columns as $col_nr => $col)
+			{
+				$saved['col'][$col_nr] = implode(' ', $col->clue);
+			}
+			$saved['plan'] = $this->get_rows();
+			if($filename)
+			{
+				file_put_contents($filename, json_encode($saved, JSON_NUMERIC_CHECK + JSON_PRETTY_PRINT));
+			}
+			return $saved;
 		}
 	}

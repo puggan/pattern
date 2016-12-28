@@ -111,7 +111,21 @@ TEXT_BLOCK;
 
 		function ask_main_menu()
 		{
-			$s = <<<TEXT_BLOCK
+			if($this->pattern)
+			{
+				$s = <<<TEXT_BLOCK
+Congratulations.
+What to do next?
+ * (S)ave
+ * (N)ew
+ * (L)oad
+ * (Q)uit
+
+TEXT_BLOCK;
+			}
+			else
+			{
+				$s = <<<TEXT_BLOCK
 Congratulations.
 What to do next?
  * (N)ew
@@ -119,6 +133,7 @@ What to do next?
  * (Q)uit
 
 TEXT_BLOCK;
+			}
 			$this->cli->print($s);
 			$option = $this->cli->ask("Select option: ");
 			switch(strtolower(substr($option, 0, 1)))
@@ -131,16 +146,26 @@ TEXT_BLOCK;
 					}
 					return TRUE;
 				}
+
 				case 'l':
 				{
 					$filename = $this->cli->ask("file path? [saved.json]") ?: 'saved.json';
 					$this->pattern = pattern::load($filename);
 					return TRUE;
 				}
+
+				case 's':
+				{
+					$filename = $this->cli->ask("file path? [saved.json]") ?: 'saved.json';
+					$this->pattern->save($filename);
+					return TRUE;
+				}
+
 				case 'q':
 				{
 					die(PHP_EOL);
 				}
+
 				default:
 				{
 					return FALSE;
