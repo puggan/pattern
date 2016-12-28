@@ -16,7 +16,7 @@
 		 *
 		 * @param int $size
 		 */
-		function __construct(integer $size)
+		function __construct(int $size)
 		{
 			$this->size = $size;
 			$this->keys = array();
@@ -29,7 +29,7 @@
 		 *
 		 * @return boolean;
 		 */
-		function set_clue($sizes) : boolean
+		function set_clue($sizes) : bool
 		{
 			$this->clue = $sizes;
 			$this->chain = new black_chain($sizes, $this->size);
@@ -43,7 +43,7 @@
 		 *
 		 * @return integer
 		 */
-		function update_key($new_key) : integer
+		function update_key($new_key) : int
 		{
 			$changes = 0;
 

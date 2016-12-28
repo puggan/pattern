@@ -1,5 +1,7 @@
 <?php
 
+	require_once("black_block.class.php");
+
 	/**
 	 * class for handeling a chain of black blocks
 	 */
@@ -20,7 +22,7 @@
 		 *
 		 * @throws Exception
 		 **/
-		function __construct($sizes, integer $width)
+		function __construct($sizes, int $width)
 		{
 			// store total width
 			$this->width = $width;
@@ -63,7 +65,7 @@
 		 *
 		 * @return boolean TRUE if changes was made
 		 **/
-		function sync(integer $index) : boolean
+		function sync(int $index) : bool
 		{
 			// check for incorrect chain number
 			if(!isset($this->chain[$index]))
@@ -88,7 +90,7 @@
 		 *
 		 * @return boolean TRUE if changes was made
 		 **/
-		function sync_left(integer $index) : boolean
+		function sync_left(int $index) : bool
 		{
 			// check for incorrect chain number
 			if(!isset($this->chain[$index]))
@@ -122,7 +124,7 @@
 		 *
 		 * @return boolean TRUE if changes was made
 		 **/
-		function sync_right(integer $index) : boolean
+		function sync_right(int $index) : bool
 		{
 			// check for incorrect chain number
 			if(!isset($this->chain[$index]))
@@ -156,7 +158,7 @@
 		 *
 		 * @return integer number of changes
 		 **/
-		function sync_black(boolean $deep = FALSE) : integer
+		function sync_black(bool $deep = FALSE) : int
 		{
 			// count changes
 			$changed = 0;
@@ -273,7 +275,7 @@
 		 *
 		 * @return integer number of changes
 		 **/
-		function mark_black(integer $pos) : integer
+		function mark_black(int $pos) : int
 		{
 			// count changes
 			$changes = 0;
@@ -321,7 +323,7 @@
 		 *
 		 * @return integer number of changes
 		 **/
-		function mark_white(integer $pos) : integer
+		function mark_white(int $pos) : int
 		{
 			// count changes
 			$changes = 0;

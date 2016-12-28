@@ -1,6 +1,5 @@
 <?php
 
-	require_once("black_block.class.php");
 	require_once("black_chain.class.php");
 	require_once("pattern_clue.class.php");
 
@@ -15,7 +14,7 @@
 		/** @var pattern_clue[] columns of clues  */
 		public $columns;
 
-		function __construct(integer $width, integer $height)
+		function __construct(int $width, int $height)
 		{
 			if($width < 1)
 			{
@@ -51,7 +50,7 @@
 		 *
 		 * @return bool
 		 */
-		function set_clue(string $type, integer $position, $sizes) : boolean
+		function set_clue(string $type, int $position, $sizes) : bool
 		{
 			if(strtolower(substr($type, 0, 1)) == 'r')
 			{
@@ -97,7 +96,7 @@
 		 *
 		 * @return int number of changes
 		 */
-		function mark_black(integer $col_nr, integer $row_nr) : integer
+		function mark_black(int $col_nr, int $row_nr) : int
 		{
 			$changes = $this->rows[$row_nr]->update_key(array($col_nr => 0));
 			$changes += $this->columns[$col_nr]->update_key(array($row_nr => 0));
@@ -112,7 +111,7 @@
 		 *
 		 * @return int number of changes
 		 */
-		function mark_white(integer $col_nr, integer $row_nr) : integer
+		function mark_white(int $col_nr, int $row_nr) : int
 		{
 			$changes = $this->rows[$row_nr]->update_key(array($col_nr => 0));
 			$changes += $this->columns[$col_nr]->update_key(array($row_nr => 0));

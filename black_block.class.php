@@ -20,7 +20,7 @@
 		 *
 		 * @throws Exception
 		 */
-		function __construct(integer $size, integer $min_start, integer $max_start)
+		function __construct(int $size, int $min_start, int $max_start)
 		{
 			if($size < 1)
 			{
@@ -116,11 +116,11 @@
 		/**
 		 * filter startpositions by black mark
 		 *
-		 * @param integr $pos the position that have the black mark
+		 * @param integer $pos the position that have the black mark
 		 *
 		 * @return boolean TRUE if changes was made
 		 */
-		function mark_black(integer $pos) : boolean
+		function mark_black(int $pos) : bool
 		{
 			// No changes so far
 			$change = FALSE;
@@ -153,7 +153,7 @@
 		 *
 		 * @return boolean TRUE if changes was made
 		 */
-		function mark_white(integer $pos) : boolean
+		function mark_white(int $pos) : bool
 		{
 			// No changes so far
 			$change = FALSE;
@@ -194,7 +194,7 @@
 		 *
 		 * @return boolean TRUE if changed
 		 */
-		function new_min_start(integer $new_pos) : boolean
+		function new_min_start(int $new_pos) : bool
 		{
 			// No changes so far
 			$change = FALSE;
@@ -227,7 +227,7 @@
 		 *
 		 * @return boolean TRUE if changed
 		 */
-		function new_max_start(integer $new_pos) : boolean
+		function new_max_start(int $new_pos) : bool
 		{
 			// No changes so far
 			$change = FALSE;
@@ -257,7 +257,7 @@
 		 *
 		 * @return boolean TRUE if changed
 		 */
-		function new_min_end(integer $new_pos) : boolean
+		function new_min_end(int $new_pos) : bool
 		{
 			// Calculate new lowest start position (end = start + length - 1)
 			return $this->new_min_start($new_pos + 1 - $this->size);
@@ -270,7 +270,7 @@
 		 *
 		 * @return boolean TRUE if changed
 		 */
-		function new_max_end(integer $new_pos) : boolean
+		function new_max_end(int $new_pos) : bool
 		{
 			// Calculate new highest start position (end = start + length - 1)
 			return $this->new_max_start($new_pos + 1 - $this->size);
@@ -283,7 +283,7 @@
 		 *
 		 * @return boolean TRUE if any startposition makes the given position black
 		 */
-		function can_be(integer $pos) : boolean
+		function can_be(int $pos) : bool
 		{
 			// pos in [start, end] = [start, start + length - 1] =>
 			// start in [pos - length + 1, pos]
@@ -318,7 +318,7 @@
 		 *
 		 * @return integer[] list of start positions
 		 */
-		function can_be_starts(integer $pos) : array
+		function can_be_starts(int $pos) : array
 		{
 			/** @var integer[] $positions list of start positions */
 			$positions = array();
@@ -358,7 +358,7 @@
 		 *
 		 * @return boolean TRUE if all startposition makes the given position black
 		 */
-		function most_be(integer $pos) : boolean
+		function most_be(int $pos) : bool
 		{
 			// pos in [start, end] = [start, start + length - 1] =>
 			// start in [pos - length + 1, pos]
@@ -398,7 +398,7 @@
 		 *
 		 * @return integer number of changes
 		 **/
-		function force_to(integer $pos) : integer
+		function force_to(int $pos) : int
 		{
 			// count changes
 			$changed = 0;
