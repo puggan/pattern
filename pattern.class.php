@@ -1,21 +1,24 @@
 <?php
 
-	// class for a black block in a black chain
+	/**
+	 * class for a black block in a black chain
+	 */
 	class black_block
 	{
-		// the length of the block
+		/** @var integer the length of the block */
 		public $size;
 
-		// list of posible start positions
+		/** @var integer[] list of posible start positions */
 		public $starts;
 
 		/**
 		 * Create a black block
-		 * @param $size the length of the block
-		 * @param $min_start first posible start location
-		 * @param $max_start last posible start location
+		 *
+		 * @param integer $size the length of the block
+		 * @param integer $min_start first posible start location
+		 * @param integer $max_start last posible start location
 		 */
-		function __construct($size, $min_start, $max_start)
+		function __construct(integer $size, integer $min_start, integer $max_start)
 		{
 			// Store size/length in object
 			$this->size = $size;
@@ -27,42 +30,78 @@
 			$this->starts = array_combine($starts, $starts);
 		}
 
-		// Return the lowest posible start location
+		/**
+		 * @return int|bool Lowest posible start location
+		 */
 		function min_start()
 		{
 			if($this->starts)
 			{
 				return min($this->starts);
 			}
+			else
+			{
+				return FALSE;
+			}
 		}
 
-		// Return the highest posible start location
+		/**
+		 * @return int|bool Highest posible start location
+		 */
 		function max_start()
 		{
 			if($this->starts)
 			{
 				return max($this->starts);
 			}
+			else
+			{
+				return FALSE;
+			}
 		}
 
-		// Return the lowest posible end location (start + length - 1)
+		/**
+		 * Return the lowest posible end location (start + length - 1)
+		 *
+		 * @return int|bool Lowest posible end location
+		 */
 		function min_end()
 		{
-			return $this->size -1 + $this->min_start();
+			if($this->starts)
+			{
+				return $this->size - 1 + $this->min_start();
+			}
+			else
+			{
+				return FALSE;
+			}
 		}
 
-		// Return the highest posible end location (start + length - 1)
+		/**
+		 * Return the highest posible end location (start + length - 1)
+		 *
+		 * @return int|bool Highest posible end location
+		 */
 		function max_end()
 		{
-			return $this->size -1 + $this->max_start();
+			if($this->starts)
+			{
+				return $this->size - 1 + $this->max_start();
+			}
+			else
+			{
+				return FALSE;
+			}
 		}
 
 		/**
 		 * filter startpositions by black mark
-		 * @param $pos the position that have the black mark
-		 * @return TRUE if changes was made
+		 *
+		 * @param integr $pos the position that have the black mark
+		 *
+		 * @return boolean TRUE if changes was made
 		 */
-		function mark_black($pos)
+		function mark_black(integer $pos) : boolean
 		{
 			// No changes so far
 			$change = FALSE;
@@ -90,10 +129,12 @@
 
 		/**
 		 * filter startpositions by white mark
-		 * @param $pos the position that have the white mark
-		 * @return TRUE if changes was made
+		 *
+		 * @param integer $pos the position that have the white mark
+		 *
+		 * @return boolean TRUE if changes was made
 		 */
-		function mark_white($pos)
+		function mark_white(integer $pos) : boolean
 		{
 			// No changes so far
 			$change = FALSE;
@@ -129,10 +170,12 @@
 
 		/**
 		 * Set a new lowest starting position
-		 * @param $new_pos new lowest starting location
-		 * @return TRUE if changed
+		 *
+		 * @param integer $new_pos new lowest starting location
+		 *
+		 * @return boolean TRUE if changed
 		 */
-		function new_min_start($new_pos)
+		function new_min_start(integer $new_pos) : boolean
 		{
 			// No changes so far
 			$change = FALSE;
@@ -160,10 +203,12 @@
 
 		/**
 		 * Set a new highest starting position
-		 * @param $new_pos new highest starting location
-		 * @return TRUE if changed
+		 *
+		 * @param integer $new_pos new highest starting location
+		 *
+		 * @return boolean TRUE if changed
 		 */
-		function new_max_start($new_pos)
+		function new_max_start(integer $new_pos) : boolean
 		{
 			// No changes so far
 			$change = FALSE;
@@ -188,10 +233,12 @@
 
 		/**
 		 * Set a new lowest end position
-		 * @param $new_pos new lowest emd location
-		 * @return TRUE if changed
+		 *
+		 * @param integer $new_pos new lowest emd location
+		 *
+		 * @return boolean TRUE if changed
 		 */
-		function new_min_end($new_pos)
+		function new_min_end(integer $new_pos) : boolean
 		{
 			// Calculate new lowest start position (end = start + length - 1)
 			return $this->new_min_start($new_pos + 1 - $this->size);
@@ -199,21 +246,25 @@
 
 		/**
 		 * Set a new highest end position
-		 * @param $new_pos new highest emd location
-		 * @return TRUE if changed
+		 *
+		 * @param integer $new_pos new highest emd location
+		 *
+		 * @return boolean TRUE if changed
 		 */
-		function new_max_end($new_pos)
+		function new_max_end(integer $new_pos) : boolean
 		{
 			// Calculate new highest start position (end = start + length - 1)
 			return $this->new_max_start($new_pos + 1 - $this->size);
 		}
 
 		/**
-		 * Chechk if this block can be at a given position
-		 * @param $pos the position to check
-		 * @return TRUE if any startposition makes the given position black
+		 * Check if this block can be at a given position
+		 *
+		 * @param integer $pos the position to check
+		 *
+		 * @return boolean TRUE if any startposition makes the given position black
 		 */
-		function can_be($pos)
+		function can_be(integer $pos) : boolean
 		{
 			// pos in [start, end] = [start, start + length - 1] =>
 			// start in [pos - length + 1, pos]
@@ -242,13 +293,15 @@
 		}
 
 		/**
-		 * Chechk where this block can start given a black position
-		 * @param $pos the black position to check
-		 * @return list of start positions
+		 * Check where this block can start given a black position
+		 *
+		 * @param integer $pos the black position to check
+		 *
+		 * @return integer[] list of start positions
 		 */
-		function can_be_starts($pos)
+		function can_be_starts(integer $pos) : array
 		{
-			// empty list of start positions
+			/** @var integer[] $positions list of start positions */
 			$positions = array();
 
 			// pos in [start, end] = [start, start + length - 1] =>
@@ -280,11 +333,13 @@
 		}
 
 		/**
-		 * Chechk if this block most be at a given position
-		 * @param $pos the position to check
-		 * @return TRUE if all startposition makes the given position black
+		 * Check if this block most be at a given position
+		 *
+		 * @param integer $pos the position to check
+		 *
+		 * @return boolean TRUE if all startposition makes the given position black
 		 */
-		function most_be($pos)
+		function most_be(integer $pos) : boolean
 		{
 			// pos in [start, end] = [start, start + length - 1] =>
 			// start in [pos - length + 1, pos]
@@ -319,10 +374,12 @@
 
 		/**
 		 * filter out all startpositions that don't make this position black
-		 * @param $pos position to force the block to contain
-		 * @return number of changes
+		 *
+		 * @param integer $pos position to force the block to contain
+		 *
+		 * @return integer number of changes
 		 **/
-		function force_to($pos)
+		function force_to(integer $pos) : integer
 		{
 			// count changes
 			$changed = 0;
@@ -355,33 +412,37 @@
 
 		/**
 		 * textual descriptions of the stored data
-		 * @return textual description
+		 *
+		 * @return string textual description
 		 **/
-		function to_s()
+		function to_s() : string
 		{
 			return "Block size: {$this->size}, start range: " . $this->min_start() . ' - ' . $this->max_start() . ", starts: " . implode(', ', $this->starts);
 		}
 	}
 
-	// class for handeling a chain of black blocks
+	/**
+	 * class for handeling a chain of black blocks
+	 */
 	class black_chain
 	{
-		// total width of the white and black blocks
+		/** @var int total width of the white and black blocks */
 		public $width;
-		// list of black blocks
+		/** @var black_block[] list of black blocks */
 		public $chain;
-		// 2D list of black positions, and a list of block numbers that it can belong to
+		/** @var integer[][] 2D list of black positions, and a list of block numbers that it can belong to */
 		public $black;
 
 		/**
 		 * Create a chain of black blocks
-		 * @param $sizes list of the sizes of the blocks in the chain
-		 * @param total width to place the blocks on
+		 *
+		 * @param integer[] $sizes list of the sizes of the blocks in the chain
+		 * @param integer $width total width to place the blocks on
 		 **/
-		function __construct($sizes, $width)
+		function __construct($sizes, integer $width)
 		{
 			// store total width
-			$this->width = (int) $width;
+			$this->width = $width;
 
 			// create an empty list for black blocks
 			$this->chain = array();
@@ -410,11 +471,13 @@
 		}
 
 		/**
-		 * synca given block with its neighbours
-		 * @param $index block number
-		 * @return TRUE if changes was made
+		 * sync a given block with its neighbours
+		 *
+		 * @param integer $index block number
+		 *
+		 * @return boolean TRUE if changes was made
 		 **/
-		function sync($index)
+		function sync(integer $index) : boolean
 		{
 			// check for incorrect chain number
 			if(!isset($this->chain[$index]))
@@ -434,10 +497,12 @@
 
 		/**
 		 * synca given block with its left most neighbours
-		 * @param $index block number
-		 * @return TRUE if changes was made
+		 *
+		 * @param integer $index block number
+		 *
+		 * @return boolean TRUE if changes was made
 		 **/
-		function sync_left($index)
+		function sync_left(integer $index) : boolean
 		{
 			// check for incorrect chain number
 			if(!isset($this->chain[$index]))
@@ -465,11 +530,13 @@
 		}
 
 		/**
-		 * synca given block with its right most neighbours
-		 * @param $index block number
-		 * @return TRUE if changes was made
+		 * sync a given block with its right most neighbours
+		 *
+		 * @param integer $index block number
+		 *
+		 * @return boolean TRUE if changes was made
 		 **/
-		function sync_right($index)
+		function sync_right(integer $index) : boolean
 		{
 			// check for incorrect chain number
 			if(!isset($this->chain[$index]))
@@ -498,8 +565,12 @@
 
 		/**
 		 * sync blocks according to the forced black marks
+		 *
+		 * @param boolean $deep sync all blocks at each black position vs sync only single blocks
+		 *
+		 * @return integer number of changes
 		 **/
-		function sync_black($deep = FALSE)
+		function sync_black(boolean $deep = FALSE) : integer
 		{
 			// count changes
 			$changed = 0;
@@ -507,6 +578,7 @@
 			// for each black position
 			foreach($this->black as $pos => $list)
 			{
+				// filter the list from blocks no longer avaible
 				// for each block that can be at this position
 				foreach($list as $index)
 				{
@@ -531,72 +603,76 @@
 						$changed++;
 					}
 				}
-				// if there is more then one posible, and this is a deep analys
-				else if($deep AND count($this->black[$pos]))
+				// if there is more then one posible
+				else if(count($this->black[$pos]))
 				{
+					// get the lowest and highest posible block
 					$min_index = min($this->black[$pos]);
 					$max_index = max($this->black[$pos]);
 
+					// as there can be no block before the lowest block, the lowest must have startead here or before
 					$this->chain[$min_index]->new_max_start($pos);
+					$this->sync($min_index);
+
+					// as there can be no block after the highest block, the highest must end here or later
 					$this->chain[$max_index]->new_min_end($pos);
+					$this->sync($max_index);
 
-					$max_start = 1;
-					$min_end = $this->width;
-
-					foreach($list as $index)
+					// this is a deep analys
+					if($deep)
 					{
-						$current_length = $this->chain[$index]->size;
-						$start_positions = $this->chain[$index]->can_be_starts($pos);
+						// the unknown block at this position, where can it start and end?
+						// set default values to start and end of the hole row
+						$max_start = 1;
+						$min_end = $this->width;
 
-						if($start_positions)
+						// for all blocks that can be at the current black position
+						foreach($list as $index)
 						{
-							$max_start = max($max_start, max($start_positions));
-							$min_end = min($min_end, min($start_positions) + $current_length - 1);
-						}
-					}
+							// fetch all posible start_location for this block, that results in the current block is black
+							$start_positions = $this->chain[$index]->can_be_starts($pos);
 
-					if($min_index)
-					{
-						foreach(range(0, $min_index - 1) as $index)
-						{
-							$this->chain[$index]->new_max_end($max_start - 2);
-							$this->sync($index);
-						}
-					}
-
-					if($max_index < count($this->chain[$index]) - 1)
-					{
-						foreach(range($max_index + 1, count($this->chain[$index]) - 1) as $index)
-						{
-							$this->chain[$index]->new_min_start($min_end + 2);
-							$this->sync($index);
-						}
-					}
-
-					if($max_start < $pos)
-					{
-						foreach(range($max_start, $pos -1) as $bpos)
-						{
-							if(!isset($this->black[$bpos]))
+							// if this block still can be at this position
+							if($start_positions)
 							{
-								$this->mark_black($bpos);
-								$changed++;
+								// update the unknown blocks interval to match the current tested block
+								$max_start = max($max_start, max($start_positions));
+								$min_end = min($min_end, min($start_positions) + $this->chain[$index]->size - 1);
+							}
+						}
+
+						// if the unknown block needs to start before the current position
+						if($max_start < $pos)
+						{
+							// loop through all position that's required to be black before this block
+							foreach(range($max_start, $pos - 1) as $bpos)
+							{
+								// if its not already marked as black
+								if(!isset($this->black[$bpos]))
+								{
+									// mark it as black
+									$this->mark_black($bpos);
+									$changed++;
+								}
+							}
+						}
+
+						// if the unknown block needs to end after the current position
+						if($pos < $min_end)
+						{
+							// loop through all position that's required to be black after this block
+							foreach(range($pos + 1, $min_end) as $bpos)
+							{
+								// if its not already marked as black
+								if(!isset($this->black[$bpos]))
+								{
+									// mark it as black
+									$this->mark_black($bpos);
+									$changed++;
+								}
 							}
 						}
 					}
-
-					if($pos < $min_end)
-					{
-						foreach(range($pos + 1, $min_end) as $bpos)
-						{
-							if(!isset($this->black[$bpos]))
-							{
-								$this->mark_black($bpos);
-								$changed++;
-							}
-						}
-					}
-
 				}
 			}
 
@@ -606,10 +682,12 @@
 
 		/**
 		 * mark a position in chain black
-		 * @param @pos position to mark as black
-		 * @return NULL
+		 *
+		 * @param integer $pos position to mark as black
+		 *
+		 * @return integer number of changes
 		 **/
-		function mark_black($pos)
+		function mark_black(integer $pos) : integer
 		{
 			// count changes
 			$changes = 0;
@@ -623,7 +701,7 @@
 				// mark this position as black in that block
 				if($current_block->mark_black($pos))
 				{
-					// sync block if this white mark made changes
+					// sync block if this black mark made changes
 					$this->sync($block_index);
 
 					// count changes
@@ -652,10 +730,12 @@
 
 		/**
 		 * mark a position in chain white
-		 * @param @pos position to mark as white
-		 * @return number of changes
+		 *
+		 * @param integer $pos position to mark as white
+		 *
+		 * @return integer number of changes
 		 **/
-		function mark_white($pos)
+		function mark_white(integer $pos) : integer
 		{
 			// count changes
 			$changes = 0;
@@ -688,53 +768,79 @@
 			return $changes;
 		}
 
+		/**
+		 * Convert to a list of known white and known black
+		 *
+		 * @return integer[] list of position->value where value=0 for white, and value=1 for black
+		 */
 		function to_keys()
 		{
-			while($this->sync_black(TRUE));
+			// make sure all black are totaly synced
+			while($this->sync_black(TRUE))
+			{
+				;
+			}
 
+			// start with all as known white
 			$keys = array_fill(1, $this->width, 0);
+
+			// for each black, mark as known black
 			foreach($this->black as $pos => $list)
 			{
 				$keys[$pos] = 1;
 			}
+
+			// for each block
 			foreach($this->chain as $current_block)
 			{
+				// for each posible positions (min_start -> max_end)
 				foreach(range($current_block->min_start(), $current_block->max_end()) as $pos)
 				{
+					// if marked as the default: known white
 					if(isset($keys[$pos]) AND $keys[$pos] == 0)
 					{
+						// and it can be black?
 						if($current_block->can_be($pos))
 						{
+							// and it must be black?
 							if($current_block->most_be($pos))
 							{
+								// mark as known black
 								$keys[$pos] = 1;
 							}
 							else
 							{
+								// mark as unknown
 								unset($keys[$pos]);
 							}
 						}
 					}
 				}
 			}
+			// make sure that the keys are in numeric order (TODO: nessesary?)
 			ksort($keys);
 			return $keys;
 		}
 
 		/**
 		 * textual descriptions of the stored data
-		 * @return textual description
+		 * @return string textual description
 		 **/
-		function to_s()
+		function to_s() : string
 		{
 			$parts = array();
+
 			foreach($this->chain as $block_index => $current_block)
 			{
 				$parts[$block_index] = $current_block->to_s();
 			}
+
 			return implode("\n", $parts);
 		}
 
+		/**
+		 * make sure the clone also clones the chain
+		 */
 		function __clone()
 		{
 			foreach($this->chain as $index => $black_block)
