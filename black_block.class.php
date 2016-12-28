@@ -17,9 +17,28 @@
 		 * @param integer $size the length of the block
 		 * @param integer $min_start first posible start location
 		 * @param integer $max_start last posible start location
+		 *
+		 * @throws Exception
 		 */
 		function __construct(integer $size, integer $min_start, integer $max_start)
 		{
+			if($size < 1)
+			{
+				throw new Exception('Size should be a positive integer');
+			}
+			if($min_start < 1)
+			{
+				throw new Exception('Min_start should be a positive integer');
+			}
+			if($min_start > $size)
+			{
+				throw new Exception('Min_start should be between 1 and size');
+			}
+			if($max_start < $min_start OR $max_start > $size)
+			{
+				throw new Exception('max_start should be between min_start and size');
+			}
+
 			// Store size/length in object
 			$this->size = $size;
 

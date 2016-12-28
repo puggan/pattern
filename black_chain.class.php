@@ -17,6 +17,8 @@
 		 *
 		 * @param integer[] $sizes list of the sizes of the blocks in the chain
 		 * @param integer $width total width to place the blocks on
+		 *
+		 * @throws Exception
 		 **/
 		function __construct($sizes, integer $width)
 		{
@@ -34,6 +36,11 @@
 
 			// calculate unknown whites
 			$width_diff = $width - $min_width;
+
+			if($width_diff < 0)
+			{
+				throw new Exception('Clues are to big');
+			}
 
 			// variable for lowest start position
 			$pos = 1;
